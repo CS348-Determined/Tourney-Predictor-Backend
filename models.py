@@ -30,3 +30,17 @@ class City(Base):
     city_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, unique=True)
     population = Column(Integer)
+
+class Bracket(Base):
+    __tablename__ = "brackets"
+    bracket_id = Column(Integer, primary_key=True, index=True)
+    bracket_name = Column(String, index=True, unique=True)
+    num_rounds = Column(Integer)
+class BracketEntry(Base):
+    __tablename__ = "bracket_entries"
+    entry_id = Column(Integer, primary_key=True, index=True)
+    team1_id = Column(Integer, ForeignKey("teams.team_id"), nullable=False)
+    team2_id = Column(Integer, ForeignKey("teams.team_id"), nullable=False)
+    team1_victor = Column(String, index=True)
+    round = Column(Integer)
+    bracket_id = Column(Integer, ForeignKey("brackets.bracket_id"), nullable=False)
