@@ -1,3 +1,4 @@
+from turtle import position
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
@@ -52,3 +53,31 @@ def update_team(team: schemas.TeamBase, teamId: str, db: Session=Depends(get_db)
 @app.post("/addTeam")
 def create_team(team: schemas.TeamBase, db: Session=Depends(get_db)):
     return crud.create_team(db=db, team=team)
+
+@app.get("/position/{positionId}")
+def get_position(positionId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * from players where players.position_id = '+positionId)
+    return result.all()
+# def get_position(positionName: str, db: Session=Depends(get_db)):
+#     result = db.execute('SELECT players.player_id, players.name, players.team_id, players.position_id FROM players join positions on players.position_id = positions.position_id WHERE positions.name = '+positionName)
+#     return result.all()
+
+
+@app.post("/addPosition")
+def create_position(position: schemas.PositionBase, db: Session=Depends(get_db)):
+    return crud.create_position(db=db, position=position)
+
+@app.put("/updatePosition/{positionId}")
+def update_position(position: schemas.PositionBase, positionId: str, db: Session=Depends(get_db)):
+    return crud.update_position(db=db, position_id=positionId, position=position)
+
+@app.post("/addSport")
+def create_sport(sport: schemas.SportBase, db: Session=Depends(get_db)):
+    return crud.create_sport(db=db, sport=sport)
+
+@app.get("/sport/{positionId}")
+def get_sport_from_position_id(positionId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT sports.name FROM positions inner join sports on positions.sport_id = sports.sport_id WHERE positions.position_id = '+positionId)
+    return result.all()
+
+

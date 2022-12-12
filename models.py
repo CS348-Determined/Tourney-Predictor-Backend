@@ -8,6 +8,8 @@ class Player(Base):
     player_id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     team_id = Column(Integer, ForeignKey("teams.team_id"))
+    position_id = Column(Integer, ForeignKey("positions.position_id"))
+
 
 class Team(Base):
     __tablename__ = "teams"
@@ -23,6 +25,8 @@ class League(Base):
 
     league_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    sport_id = Column(Integer, ForeignKey("sports.sport_id"))
+
 
 class City(Base):
     __tablename__ = "cities"
@@ -30,3 +34,18 @@ class City(Base):
     city_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, unique=True)
     population = Column(Integer)
+
+class Sport(Base):
+    __tablename__ = "sports"
+
+    sport_id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+
+class Position(Base):
+    __tablename__ = "positions"
+
+    position_id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    sport_id = Column(Integer, ForeignKey("sports.sport_id"))
+
+
