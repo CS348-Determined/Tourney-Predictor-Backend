@@ -36,6 +36,17 @@ class CityBase(BaseModel):
 class City(CityBase):
     city_id: int
 
+class GameBase(BaseModel):
+    home_team_id: int
+    away_team_id: int
+    winner: int
+
+class Game(GameBase):
+    game_id: int
+
+    class Config:
+        orm_mode = True
+        
 class BracketEntryBase(BaseModel):
     team1_id: int
     team2_id: int

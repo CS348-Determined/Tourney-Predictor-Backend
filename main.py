@@ -87,6 +87,19 @@ def get_team(bracketId: str, db: Session=Depends(get_db)):
 def create_team(team: schemas.TeamBase, db: Session=Depends(get_db)):
     return crud.create_team(db=db, team=team)
 
+@app.post("/addGame")
+def create_game(game: schemas.GameBase, db: Session=Depends(get_db)):
+    return crud.create_game(db=db, game=game)
+
+@app.put("/updateGame/{gameId}")
+def update_game(game: schemas.GameBase, gameId: str, db: Session=Depends(get_db)):
+    return crud.update_game(db=db, game_id=gameId, game=game)
+
+@app.get("/game/{gameId}")
+def get_game(gameId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM games WHERE game_id = '+gameId)
+    return result.all()
+    
 @app.post("/addBracket/{defaultTeamId}")
 def create_team(defaultTeamId:str, bracket: schemas.BracketBase, db: Session=Depends(get_db)):
     return crud.create_bracket(db=db, defaultTeamId=defaultTeamId,bracket=bracket)
