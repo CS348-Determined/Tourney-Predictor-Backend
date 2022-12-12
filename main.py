@@ -64,5 +64,4 @@ def update_game(game: schemas.GameBase, gameId: str, db: Session=Depends(get_db)
 @app.get("/game/{gameId}")
 def get_game(gameId: str, db: Session=Depends(get_db)):
     result = db.execute('SELECT * FROM games WHERE game_id = '+gameId)
-    print(result)
     return result.all()
