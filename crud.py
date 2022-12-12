@@ -33,3 +33,28 @@ def create_team(db: Session, team: schemas.TeamBase):
     db.commit()
     db.refresh(db_team)
     return db_team
+
+def create_game(db: Session, game: schemas.GameBase):
+    db_game = models.Game(**game.dict())
+    db.add(db_game)
+    db.commit()
+    db.refresh(db_game)
+    return db_game
+
+def update_game(db: Session, game_id: int, game: schemas.GameBase):
+    db_game = db.query(models.Game).filter(models.Game.game_id == game_id).first()
+    if not db_game:
+        raise HTTPException(status_code=404, detail="Game not found")
+    hero_data = game.dict(exclude_unset=True)
+    for key, value in hero_data.items():
+        setattr(db_game, key, value)
+    db.add(db_game)
+    db.commit()
+    db.refresh(db_game)
+    return db_game
+
+def get_game(db: Session, game_id: int):
+    return db.query(models.Game).filter(models.Game.game_id == game_id).first()
+
+def get_all_games(db: Session):
+    return db.execute('SELECT * FROM games')

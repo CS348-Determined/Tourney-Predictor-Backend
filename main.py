@@ -52,3 +52,17 @@ def update_team(team: schemas.TeamBase, teamId: str, db: Session=Depends(get_db)
 @app.post("/addTeam")
 def create_team(team: schemas.TeamBase, db: Session=Depends(get_db)):
     return crud.create_team(db=db, team=team)
+
+@app.post("/addGame")
+def create_game(game: schemas.GameBase, db: Session=Depends(get_db)):
+    return crud.create_game(db=db, game=game)
+
+@app.put("/updateGame/{gameId}")
+def update_game(game: schemas.GameBase, gameId: str, db: Session=Depends(get_db)):
+    return crud.update_game(db=db, game_id=gameId, game=game)
+
+@app.get("/game/{gameId}")
+def get_game(gameId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM games WHERE game_id = '+gameId)
+    print(result)
+    return result.all()

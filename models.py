@@ -30,3 +30,11 @@ class City(Base):
     city_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, unique=True)
     population = Column(Integer)
+
+class Game(Base):
+    __tablename__ = "games"
+
+    game_id = Column(Integer, primary_key=True, index=True)
+    home_team_id = Column(Integer, ForeignKey("teams.team_id"))
+    away_team_id = Column(Integer, ForeignKey("teams.team_id"))
+    winner = Column(Integer, index=True, nullable=True, default=-1)
