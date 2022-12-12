@@ -36,6 +36,30 @@ def create_team(db: Session, team: schemas.TeamBase):
     db.commit()
     db.refresh(db_team)
     return db_team
+    
+def create_bracket(db: Session, defaultTeamId: str, bracket: schemas.BracketBase):
+    db_bracket = models.Bracket(**bracket.dict())
+    db.add(db_bracket)
+    db.commit()
+    for i in range(bracket.num_rounds):
+        r = i+1
+        num_entries = 2 ** (bracket.num_rounds - r)
+        for entry in range(num_entries):
+            bracketEntry = {
+                "round": r,
+                "team1_id": defaultTeamId,
+                "team2_id":defaultTeamId,
+                "bracket_id": db_bracket.bracket_id,
+                "team1_victor": True
+            }
+            db_entry = models.BracketEntry(**bracketEntry)
+            print("Adding entry")
+            db.add(db_entry)
+            
+    db.flush()
+    db.commit()
+    db.refresh(db_bracket)
+    return db_bracket.bracket_id
 
 def get_position(db: Session, position_id: int):
     return db.query(models.Player).filter(models.Player.player_id == position_id).first()

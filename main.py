@@ -41,6 +41,11 @@ def get_team(teamId: str, db: Session=Depends(get_db)):
     result = db.execute('SELECT * FROM teams WHERE team_id = '+teamId)
     return result.all()
 
+@app.get("/allTeams")
+def get_players(db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM teams')
+    return result.all()
+
 @app.get("/league/{leagueId}")
 def get_league(leagueId: str, db: Session=Depends(get_db)):
     result = db.execute('SELECT * FROM leagues WHERE league_id = '+leagueId)
@@ -50,9 +55,46 @@ def get_league(leagueId: str, db: Session=Depends(get_db)):
 def update_team(team: schemas.TeamBase, teamId: str, db: Session=Depends(get_db)):
     return crud.update_team(db=db, team_id=teamId, team=team)
 
+@app.put("/updateBracketEntry/{entryId}")
+def update_bracketEntry(bracketEntry: schemas.BracketEntryBase, entryId: str, db: Session=Depends(get_db)):
+    query = ("UPDATE bracket_entries set team1_id = "+ str(bracketEntry.team1_id) + ", "
+        "team2_id = " + str(bracketEntry.team2_id) + ", "
+        "team1_victor = " + str(bracketEntry.team1_victor) + ", "
+        "round = " + str(bracketEntry.round) + ", "
+        "bracket_id = " + str(bracketEntry.bracket_id) + " "
+        "WHERE entry_id = " + str(entryId)+";")
+    #print(query)
+    result = db.execute(query)
+    db.commit()
+    #return result.all()
+
+@app.get("/getBracketEntries/{bracketId}")
+def get_team(bracketId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM bracket_entries WHERE bracket_id = '+bracketId+' ORDER BY entry_id')
+    return result.all()
+
+@app.get("/getPlayersForTeam/{teamId}")
+def get_team(teamId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM players WHERE team_id = '+teamId)
+    return result.all()
+
+@app.get("/bracket/{bracketId}")
+def get_team(bracketId: str, db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM brackets WHERE bracket_id = '+bracketId)
+    return result.all()
+
 @app.post("/addTeam")
 def create_team(team: schemas.TeamBase, db: Session=Depends(get_db)):
     return crud.create_team(db=db, team=team)
+
+@app.post("/addBracket/{defaultTeamId}")
+def create_team(defaultTeamId:str, bracket: schemas.BracketBase, db: Session=Depends(get_db)):
+    return crud.create_bracket(db=db, defaultTeamId=defaultTeamId,bracket=bracket)
+
+@app.get("/allLeagues")
+def get_allLeagues(db: Session=Depends(get_db)):
+    result = db.execute('SELECT * FROM leagues')
+    return result.all()
 
 @app.get("/position/{positionId}")
 def get_position(positionId: str, db: Session=Depends(get_db)):
@@ -79,5 +121,3 @@ def create_sport(sport: schemas.SportBase, db: Session=Depends(get_db)):
 def get_sport_from_position_id(positionId: str, db: Session=Depends(get_db)):
     result = db.execute('SELECT sports.name FROM positions inner join sports on positions.sport_id = sports.sport_id WHERE positions.position_id = '+positionId)
     return result.all()
-
-

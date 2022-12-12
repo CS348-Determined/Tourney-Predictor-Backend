@@ -36,6 +36,27 @@ class CityBase(BaseModel):
 class City(CityBase):
     city_id: int
 
+class BracketEntryBase(BaseModel):
+    team1_id: int
+    team2_id: int
+    team1_victor: bool
+    round: int
+    bracket_id: int
+
+class BracketEntry(BracketEntryBase):
+    entry_id: int
+    class Config:
+        orm_mode = True
+    
+class BracketBase(BaseModel):
+    bracket_name: str
+    num_rounds: int
+
+class Bracket(BracketBase):
+    bracket_id: int
+    class Config:
+        orm_mode = True
+        
 class SportBase(BaseModel):
     name: str
 
