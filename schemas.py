@@ -4,6 +4,7 @@ from sqlalchemy import null
 class PlayerBase(BaseModel):
     name: str
     team_id: int
+    position_id: int
 
 class Player(PlayerBase):
     player_id: int
@@ -55,3 +56,20 @@ class Bracket(BracketBase):
     bracket_id: int
     class Config:
         orm_mode = True
+        
+class SportBase(BaseModel):
+    name: str
+
+
+class Sport(SportBase):
+    sport_id: int
+    class Config: orm_mode = True
+
+
+class PositionBase(BaseModel):
+    name: str
+    sport_id: int
+
+class Position(PositionBase):
+    position_id: int
+    class Config: orm_mode = True
