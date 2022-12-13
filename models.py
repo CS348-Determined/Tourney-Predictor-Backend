@@ -22,7 +22,8 @@ class League(Base):
     __tablename__ = "leagues"
 
     league_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    name = Column(String)
+    city_id = Column(Integer, ForeignKey("cities.city_id"))
 
 class City(Base):
     __tablename__ = "cities"
@@ -30,3 +31,5 @@ class City(Base):
     city_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, unique=True)
     population = Column(Integer)
+    lat = Column(Integer)
+    lng = Column(Integer)

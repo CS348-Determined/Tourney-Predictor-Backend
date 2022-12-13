@@ -24,6 +24,7 @@ class Team(BaseModel):
 
 class LeagueBase(BaseModel):
     name: str
+    city_id: int
 
 class League(LeagueBase):
     league_id: str
